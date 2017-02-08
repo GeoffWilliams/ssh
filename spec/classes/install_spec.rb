@@ -22,7 +22,7 @@ describe 'ssh::install' do
     end
 
     context 'installs correct package' do
-      it { should contain_package('openssh') }
+      it { should contain_package('openssh-server') }
     end
 
   end

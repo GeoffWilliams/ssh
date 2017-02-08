@@ -1,7 +1,8 @@
 # Ssh::Install
 #
 # Install SSH server daemon using the default package repository on RedHat or
-# the passed in package via a manual hash for AIX and Solaris
+# the passed in package via a manual hash for AIX and Solaris - intended to be
+# used via `include ssh`
 #
 # @param manual_package Hashed package resource(s) to install on AIX or Solaris.
 #   Omitting this variable on these platforms is an error on the user's behalf
@@ -12,8 +13,8 @@
 #   needed
 class ssh::install(
     $manual_package = $ssh::manual_package,
-    $package_name   = $ssh::params::package_name,
-) inherits ssh::params {
+    $package_name   = $ssh::package_name,
+) {
 
   if $manual_package {
     # If packages are required to be manually installed (rpm...) then use hash

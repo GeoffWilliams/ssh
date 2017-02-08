@@ -8,7 +8,8 @@
   "project_page": "https://github.com/GeoffWilliams/ssh",
   "issues_url": "https://github.com/GeoffWilliams/ssh/issues",
   "dependencies": [
-    {"name":"puppetlabs-stdlib","version_requirement":"4.15.0"}
+    {"name":"puppetlabs-stdlib","version_requirement":">= 4.15.0"},
+    {"name":"herculesteam-augeasproviders_ssh","version_requirement":">= 2.5.0"}
   ],
   "data_provider": null
 }
