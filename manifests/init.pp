@@ -1,48 +1,20 @@
-# Class: ssh
-# ===========================
+# Ssh
 #
-# Full description of class ssh here.
+# Install and manage ssh daemon with Puppet
 #
-# Parameters
-# ----------
-#
-# Document parameters here.
-#
-# * `sample parameter`
-# Explanation of what this parameter affects and what it defaults to.
-# e.g. "Specify one or more upstream ntp servers as an array."
-#
-# Variables
-# ----------
-#
-# Here you should define a list of variables that this module would require.
-#
-# * `sample variable`
-#  Explanation of how this variable affects the function of this class and if
-#  it has a default. e.g. "The parameter enc_ntp_servers must be set by the
-#  External Node Classifier as a comma separated list of hostnames." (Note,
-#  global variables should be avoided in favor of class parameters as
-#  of Puppet 2.6.)
-#
-# Examples
-# --------
-#
-# @example
-#    class { 'ssh':
-#      servers => [ 'pool.ntp.org', 'ntp.local.company.com' ],
-#    }
-#
-# Authors
-# -------
-#
-# Author Name <author@domain.com>
-#
-# Copyright
-# ---------
-#
-# Copyright 2017 Your name here, unless otherwise noted.
-#
-class ssh {
+# @param install Request installation of package
+# @param manual_package Manual hash of package resources to install manually on
+#   AIX and Solaris
+# @param auto_install Can we install automatically or not (without a
+#   $manual_packages hash)
+class ssh(
+    $install        = true,
+    $manual_package = $ssh::params::manual_package,
+    $auto_install   = $ssh::params::auto_install,
+)  inherits ssh::params {
 
+  if $install and ($auto_install or ! empty($manual_package)) {
+    include ssh::install
+  }
 
 }
