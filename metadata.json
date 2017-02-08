@@ -1,0 +1,15 @@
+{
+  "name": "geoffwilliams-ssh",
+  "version": "0.1.0",
+  "author": "geoffwilliams",
+  "summary": "Manage SSH with Puppet on AIX, Solaris and RHEL",
+  "license": "Apache-2.0",
+  "source": "https://github.com/GeoffWilliams/ssh",
+  "project_page": "https://github.com/GeoffWilliams/ssh",
+  "issues_url": "https://github.com/GeoffWilliams/ssh/issues",
+  "dependencies": [
+    {"name":"puppetlabs-stdlib","version_requirement":">= 1.0.0"}
+  ],
+  "data_provider": null
+}
+
