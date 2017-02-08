@@ -9,6 +9,7 @@ class ssh::params {
       $package_name       = "openssh-server"
       $config_file_group  = "root"
       $config_file_mode   = "0600"
+      $service_name       = "sshd"
     }
     'Solaris': {
       $auto_install       = false
@@ -16,18 +17,25 @@ class ssh::params {
       $package_name       = undef
       $config_file_group  = "sys"
       $config_file_mode   = "0644"
+      $service_name       = undef
     }
     'AIX': {
-      $auto_install   = false
-      $manual_package = {}
-      $package_name   = undef
+      $auto_install       = false
+      $manual_package     = {}
+      $package_name       = undef
       $config_file_group  = "system"
       $config_file_mode   = "0644"
+      $service_name       = undef
     }
     default: {
       fail("Module ${module_name} does not support ${facts['os']['family']}")
     }
   }
+
+  $manage_package             = true
+  $manage_service             = true
+  $service_ensure             = running
+  $service_enable             = true
 
   $config_file_name           = "/etc/ssh/sshd_config"
 

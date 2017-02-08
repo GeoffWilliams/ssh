@@ -6,6 +6,10 @@ class ssh::config(
     $config_file_group          = $ssh::config_file_group,
     $config_file_mode           = $ssh::config_file_mode,
 
+    $manage_service             = $ssh::manage_service,
+    $service_title              = $ssh::service_title,
+    $service_name               = $ssh::service_name,
+
     $protocol                   = $ssh::protocol,
     $log_level                  = $ssh::log_level,
     $x11_forwarding             = $ssh::x11_forwarding,
@@ -29,8 +33,17 @@ class ssh::config(
     mode   => $config_file_mode,
   }
 
+  # If we have been asked to manage the service then restart it if needed,
+  # otherwise sysadmin needs to do this manually
+  if $manage_service and $service_name {
+    $notify = "Service[${service_title}]"
+  } else {
+    $notify = undef
+  }
+
   Sshd_config {
     ensure => present,
+    notify => $notify,
   }
 
   sshd_config { "Protocol":

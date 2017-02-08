@@ -11,6 +11,8 @@ describe 'ssh::config' do
   context "RedHat" do
     let :facts do
       {
+        # operatingsystem needed to override host OS when testing on macos :/
+        :operatingsystem => "Centos",
         :os => {
           :family => "RedHat"
         }

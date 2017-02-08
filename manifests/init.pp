@@ -8,7 +8,11 @@
 # @param auto_install Can we install automatically or not (without a
 #   $manual_packages hash)
 class ssh(
-    $install                    = true,
+    $manage_package             = $ssh::params::manage_package,
+    $manage_service             = $ssh::params::manage_service,
+    $service_name               = $ssh::params::service_name,
+    $service_ensure             = $ssh::params::service_ensure,
+    $service_enable             = $ssh::params::service_enable,
     $manual_package             = $ssh::params::manual_package,
     $auto_install               = $ssh::params::auto_install,
     $package_name               = $ssh::params::package_name,
@@ -30,12 +34,22 @@ class ssh(
     $client_alive_interval      = $ssh::params::client_alive_interval,
     $client_alive_count_max     = $ssh::params::client_alive_count_max,
     $banner                     = $ssh::params::banner,
-)  inherits ssh::params {
+) inherits ssh::params {
 
-  if $install and ($auto_install or ! empty($manual_package)) {
+  $service_title = "sshd"
+
+  if $manage_package and ($auto_install or ! empty($manual_package)) {
     include ssh::install
   }
 
   include ssh::config
+
+  if $manage_service and $service_name {
+    service { $service_title:
+      ensure => $service_ensure,
+      name   => $service_name,
+      enable => $service_enable,
+    }
+  }
 
 }

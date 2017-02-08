@@ -1,8 +1,7 @@
 # BATS test file to run after executing 'examples/init.pp' with puppet.
 #
-# For more info on BATS see https://github.com/sstephenson/bats
-
-# Tests are really easy! just the exit status of running a command...
+# NOTE:  service will not start correctly under PDQtest since we're not running
+# a fully configured (priviledged mode) SSHD
 @test "Protocol" {
   grep "Protocol 2" /etc/ssh/sshd_config
 }
