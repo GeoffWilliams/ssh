@@ -11,9 +11,6 @@
 }
 
 @test "X11Forwarding" {
-
-  skip
-
   grep "X11Forwarding no" /etc/ssh/sshd_config
 }
 
