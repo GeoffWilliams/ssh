@@ -23,7 +23,7 @@ class ssh(
 
     $protocol                   = $ssh::params::protocol,
     $log_level                  = $ssh::params::log_level,
-    $x11_forwarding             = $ssh::params::x11_forwarding,
+#    $x11_forwarding             = $ssh::params::x11_forwarding,
     $max_auth_tries             = $ssh::params::max_auth_tries,
     $ignore_rhosts              = $ssh::params::ignore_rhosts,
     $hostbased_authentication   = $ssh::params::hostbased_authentication,
@@ -34,6 +34,8 @@ class ssh(
     $client_alive_interval      = $ssh::params::client_alive_interval,
     $client_alive_count_max     = $ssh::params::client_alive_count_max,
     $banner                     = $ssh::params::banner,
+
+    $extra_config               = {},
 ) inherits ssh::params {
 
   $service_title = "sshd"

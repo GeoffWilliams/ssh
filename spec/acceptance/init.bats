@@ -10,9 +10,9 @@
   grep "LogLevel INFO" /etc/ssh/sshd_config
 }
 
-@test "X11Forwarding" {
-  grep "X11Forwarding no" /etc/ssh/sshd_config
-}
+# @test "X11Forwarding" {
+#   grep "X11Forwarding no" /etc/ssh/sshd_config
+# }
 
 @test "MaxAuthTries" {
   grep "MaxAuthTries 3" /etc/ssh/sshd_config

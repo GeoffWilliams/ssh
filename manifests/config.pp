@@ -12,7 +12,7 @@ class ssh::config(
 
     $protocol                   = $ssh::protocol,
     $log_level                  = $ssh::log_level,
-    $x11_forwarding             = $ssh::x11_forwarding,
+#    $x11_forwarding             = $ssh::x11_forwarding,
     $max_auth_tries             = $ssh::max_auth_tries,
     $ignore_rhosts              = $ssh::ignore_rhosts,
     $hostbased_authentication   = $ssh::hostbased_authentication,
@@ -24,6 +24,7 @@ class ssh::config(
     $client_alive_count_max     = $ssh::client_alive_count_max,
     $banner                     = $ssh::banner,
 
+    $extra_config               = $ssh::extra_config,
 ) {
 
   file { $config_file_name:
@@ -50,13 +51,15 @@ class ssh::config(
     value => $protocol,
   }
 
+
   sshd_config { "LogLevel":
     value => $log_level,
   }
 
-  sshd_config { "X11Forwarding":
-    value => $x11_forwarding,
-  }
+  # dont manage this yet
+  # sshd_config { "X11Forwarding":
+  #   value => $x11_forwarding,
+  # }
 
   sshd_config { "MaxAuthTries":
     value => $max_auth_tries,
@@ -97,4 +100,7 @@ class ssh::config(
   sshd_config { "Banner":
     value  => $banner,
   }
+
+  # create any user supplie d
+  create_resources("sshd_config", $extra_config)
 }

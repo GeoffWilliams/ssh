@@ -22,8 +22,8 @@ describe 'ssh::config' do
     context 'with default values for all parameters' do
       it { should contain_class('ssh::config') }
     end
-  end
 
+  end
   #
   # AIX
   #
@@ -57,4 +57,33 @@ describe 'ssh::config' do
       it { should contain_class('ssh::config') }
     end
   end
+
+  context 'extra_config evaluated correctly' do
+    let :facts do
+      {
+        :os => {
+          :family => "RedHat"
+        }
+      }
+    end
+    let(:pre_condition) do
+      '
+      class { "ssh":
+        extra_config => {
+          "PubkeyAuthentication" => {
+            "value"  => "no",
+          }
+        }
+      }
+      '
+    end
+    it { should contain_class('ssh::config') }
+    it { should contain_sshd_config("PubkeyAuthentication").with(
+      {
+        :value => "no",
+      }
+    )}
+  end
+
+
 end
