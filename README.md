@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/GeoffWilliams/ssh.svg?branch=master)](https://travis-ci.org/GeoffWilliams/ssh)
+[![Build Status](https://travis-ci.org/declarativesystems/ssh.svg?branch=master)](https://travis-ci.org/GeoffWilliams/ssh)
 # ssh
 
 #### Table of Contents
