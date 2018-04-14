@@ -1,6 +1,6 @@
 require 'spec_helper'
 require 'puppet_factset'
-describe 'ssh' do
+describe 'ssh::params' do
   # Uncomment only the factset you would like to use for these tests
   # system_name = 'AIX-6.1-powerpc'
   # system_name = 'AIX-7.1-powerpc'
@@ -35,6 +35,6 @@ describe 'ssh' do
   end
 
   context 'with default values for all parameters' do
-    it { should contain_class('ssh') }
+    it { should contain_class('ssh::params') }
   end
 end

@@ -1,0 +1,15 @@
+1.0.0 2018-04-14
+================
+Breaking changes for those using ssh::install and ssh::config classes individually:
+  * These classes were removed
+  * Module simplified and functionality moved to ssh class
+  * Hiera keynames changed due to above
+
+Testing:
+  * Update to latest PDQTest
+  * Update acceptance tests to check SSH service operational
+  * Extra test for manual installation (AIX/Solaris)
+  * Removed and regenerated the rspec tests for simplicity
+
+Documentation:
+  * ...There is documentation now ;-)

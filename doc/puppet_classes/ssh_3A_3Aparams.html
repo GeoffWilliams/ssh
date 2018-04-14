@@ -6,7 +6,7 @@
 <title>
   Puppet Class: ssh::params
   
-    &mdash; Documentation by YARD 0.9.9
+    &mdash; Documentation by YARD 0.9.12
   
 </title>
 
@@ -147,14 +147,7 @@
 48
 49
 50
-51
-52
-53
-54
-55
-56
-57
-58</pre>
+51</pre>
       </td>
       <td>
         <pre class="code"><span class="info file"># File 'manifests/params.pp', line 4</span>
@@ -163,7 +156,6 @@ class ssh::params {
   case $facts[&#39;os&#39;][&#39;family&#39;] {
     &#39;RedHat&#39;: {
       $auto_install       = true
-      $manual_package     = undef
       $package_name       = &quot;openssh-server&quot;
       $config_file_group  = &quot;root&quot;
       $config_file_mode   = &quot;0600&quot;
@@ -171,16 +163,12 @@ class ssh::params {
     }
     &#39;Solaris&#39;: {
       $auto_install       = false
-      $manual_package     = {}
-      $package_name       = undef
       $config_file_group  = &quot;sys&quot;
       $config_file_mode   = &quot;0644&quot;
       $service_name       = &quot;svc:/network/ssh&quot;
     }
     &#39;AIX&#39;: {
       $auto_install       = false
-      $manual_package     = {}
-      $package_name       = undef
       $config_file_group  = &quot;system&quot;
       $config_file_mode   = &quot;0600&quot;
       $service_name       = &quot;sshd&quot;
@@ -211,8 +199,6 @@ class ssh::params {
   $client_alive_interval      = &quot;300&quot;
   $client_alive_count_max     = &quot;1&quot;
   $banner                     = &quot;/etc/issue.net&quot;
-
-
 }</pre>
       </td>
     </tr>

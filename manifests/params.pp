@@ -5,7 +5,6 @@ class ssh::params {
   case $facts['os']['family'] {
     'RedHat': {
       $auto_install       = true
-      $manual_package     = undef
       $package_name       = "openssh-server"
       $config_file_group  = "root"
       $config_file_mode   = "0600"
@@ -13,16 +12,12 @@ class ssh::params {
     }
     'Solaris': {
       $auto_install       = false
-      $manual_package     = {}
-      $package_name       = undef
       $config_file_group  = "sys"
       $config_file_mode   = "0644"
       $service_name       = "svc:/network/ssh"
     }
     'AIX': {
       $auto_install       = false
-      $manual_package     = {}
-      $package_name       = undef
       $config_file_group  = "system"
       $config_file_mode   = "0600"
       $service_name       = "sshd"
@@ -53,6 +48,4 @@ class ssh::params {
   $client_alive_interval      = "300"
   $client_alive_count_max     = "1"
   $banner                     = "/etc/issue.net"
-
-
 }

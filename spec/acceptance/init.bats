@@ -2,6 +2,11 @@
 #
 # NOTE:  service will not start correctly under PDQtest since we're not running
 # a fully configured (priviledged mode) SSHD
+
+@test "service running" {
+  systemctl status sshd
+}
+
 @test "Protocol" {
   grep "Protocol 2" /etc/ssh/sshd_config
 }
