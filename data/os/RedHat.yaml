@@ -1,0 +1,7 @@
+# data/os/RedHat.yaml
+---
+ssh::auto_install: true
+ssh::package_name: "openssh-server"
+ssh::config_file_group: "root"
+ssh::config_file_mode: "0600"
+ssh::service_name: "sshd"

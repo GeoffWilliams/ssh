@@ -1,0 +1,6 @@
+# data/os/Solaris.yaml
+---
+ssh::auto_install: false
+ssh::config_file_group: "sys"
+ssh::config_file_mode: "0644"
+ssh::service_name: "svc:/network/ssh"

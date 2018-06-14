@@ -62,11 +62,6 @@
       <div id="content"><h1>Puppet Class: ssh</h1>
 <div class="box_info">
   
-  <dl>
-    <dt>Inherits:</dt>
-    <dd><span class='object_link'><a href="ssh_3A_3Aparams.html" title="puppet_classes::ssh::params (puppet_class)">ssh::params</a></span></dd>
-  </dl>
-  
   
   <dl>
     <dt>Defined in:</dt>
@@ -88,10 +83,13 @@ information is required for package installation (eg location of package
 file when using rpm directly) then this can be passed using
 <code>manual_package</code>. This is a requirement for AIX and Solaris.</p>
 
-<p>Where configuration away from the defaults in this module is required, you
-may choose to edit/not edit particular directives in the sshd_config config
-file (uses Augeas). Note that this is an in-place edit and will preserve
-any existing content that is not required to be changed.</p>
+<p>This module only rewrites the parts the of the <code>sshd_config</code>
+file you tell it to in order to preserve defaults/fixes from the vendor.
+Where explicit configuration is required, it should be passed in the
+<code>settings</code> hash.</p>
+
+<p>Augeaus SSH provider is used to perform the re-write of the
+<code>sshd_config</code> file</p>
 
   </div>
 </div>
@@ -132,8 +130,10 @@ logging</p>
 </div></p>
       
       <pre class="example code"><code>class { &quot;ssh&quot;:
-  permit_root_login =&gt; &quot;no&quot;,
-  log_level         =&gt; &quot;DEBUG&quot;,
+  settings =&gt; {
+    &quot;permit_root_login&quot; =&gt; &quot;no&quot;,
+    &quot;log_level&quot;         =&gt; &quot;DEBUG&quot;,
+  },
 }</code></pre>
     
       
@@ -149,6 +149,24 @@ logging</p>
   },
 }</code></pre>
     
+      
+        <p class="example_title"><div class='inline'>
+<p>Hiera data for some common settings (supported keys are those allowed by
+ssh itself)</p>
+</div></p>
+      
+      <pre class="example code"><code>ssh::settings:
+  Banner: &quot;/etc/issue.net&quot;
+  Protocol: &quot;2&quot;
+  MaxAuthTries: &quot;4&quot;
+  PermitRootLogin: &quot;no&quot;
+  Ciphers:
+    - &quot;aes128-ctr&quot;
+    - &quot;aes192-ctr&quot;
+    - &quot;aes256-ctr&quot;
+  ClientAliveInterval: &quot;300&quot;
+  ClientAliveCountMax: &quot;1&quot;</code></pre>
+    
   </div>
 <p class="tag_title">Parameters:</p>
 <ul class="param">
@@ -161,7 +179,7 @@ logging</p>
         <span class='type'>(<tt>Boolean</tt>)</span>
       
       
-        <em class="default">(defaults to: <tt>$ssh::params::manage_package</tt>)</em>
+        <em class="default">(defaults to: <tt>true</tt>)</em>
       
       
         &mdash;
@@ -179,7 +197,7 @@ logging</p>
         <span class='type'>(<tt>Boolean</tt>)</span>
       
       
-        <em class="default">(defaults to: <tt>$ssh::params::manage_service</tt>)</em>
+        <em class="default">(defaults to: <tt>true</tt>)</em>
       
       
         &mdash;
@@ -197,8 +215,6 @@ logging</p>
         <span class='type'>(<tt>String</tt>)</span>
       
       
-        <em class="default">(defaults to: <tt>$ssh::params::service_name</tt>)</em>
-      
       
         &mdash;
         <div class='inline'>
@@ -215,7 +231,7 @@ logging</p>
         <span class='type'>(<tt>Enum["stopped", "running"]</tt>)</span>
       
       
-        <em class="default">(defaults to: <tt>$ssh::params::service_ensure</tt>)</em>
+        <em class="default">(defaults to: <tt>&quot;running&quot;</tt>)</em>
       
       
         &mdash;
@@ -233,7 +249,7 @@ logging</p>
         <span class='type'>(<tt>Boolean</tt>)</span>
       
       
-        <em class="default">(defaults to: <tt>$ssh::params::service_enable</tt>)</em>
+        <em class="default">(defaults to: <tt>true</tt>)</em>
       
       
         &mdash;
@@ -271,8 +287,6 @@ Required on AIX and Solaris</p>
         <span class='type'>(<tt>Boolean</tt>)</span>
       
       
-        <em class="default">(defaults to: <tt>$ssh::params::auto_install</tt>)</em>
-      
       
         &mdash;
         <div class='inline'>
@@ -289,8 +303,6 @@ package details manually. Normally autodetected</p>
       
         <span class='type'>(<tt>String</tt>)</span>
       
-      
-        <em class="default">(defaults to: <tt>$ssh::params::package_name</tt>)</em>
       
       
         &mdash;
@@ -311,7 +323,7 @@ the package has already been installed</p>
         <span class='type'>(<tt>String</tt>)</span>
       
       
-        <em class="default">(defaults to: <tt>$ssh::params::config_file_name</tt>)</em>
+        <em class="default">(defaults to: <tt>&quot;/etc/ssh/sshd_config&quot;</tt>)</em>
       
       
         &mdash;
@@ -329,8 +341,6 @@ the package has already been installed</p>
         <span class='type'>(<tt>String</tt>)</span>
       
       
-        <em class="default">(defaults to: <tt>$ssh::params::config_file_group</tt>)</em>
-      
       
         &mdash;
         <div class='inline'>
@@ -346,8 +356,6 @@ the package has already been installed</p>
       
         <span class='type'>(<tt>String</tt>)</span>
       
-      
-        <em class="default">(defaults to: <tt>$ssh::params::config_file_mode</tt>)</em>
       
       
         &mdash;
@@ -365,7 +373,7 @@ the package has already been installed</p>
         <span class='type'></span>
       
       
-        <em class="default">(defaults to: <tt>$ssh::params::manage_service</tt>)</em>
+        <em class="default">(defaults to: <tt>true</tt>)</em>
       
       
         &mdash;
@@ -383,8 +391,6 @@ the package has already been installed</p>
         <span class='type'></span>
       
       
-        <em class="default">(defaults to: <tt>$ssh::params::service_name</tt>)</em>
-      
       
         &mdash;
         <div class='inline'>
@@ -395,506 +401,41 @@ the package has already been installed</p>
   
     <li>
       
-        <span class='name'>protocol</span>
+        <span class='name'>service_title</span>
       
       
         <span class='type'>(<tt>String</tt>)</span>
       
       
-        <em class="default">(defaults to: <tt>$ssh::params::protocol</tt>)</em>
+        <em class="default">(defaults to: <tt>&quot;sshd&quot;</tt>)</em>
       
-      
-        &mdash;
-        <div class='inline'>
-<p><code>protocol</code> parameter to write to config file</p>
-</div>
       
     </li>
   
     <li>
       
-        <span class='name'>manage_protocol</span>
+        <span class='name'>settings</span>
       
       
-        <span class='type'>(<tt>Boolean</tt>)</span>
-      
-      
-        <em class="default">(defaults to: <tt>true</tt>)</em>
-      
-      
-        &mdash;
-        <div class='inline'>
-<p><code>true</code> to manage the <code>protocol</code> line in config file
-otherwise leave alone</p>
-</div>
-      
-    </li>
-  
-    <li>
-      
-        <span class='name'>log_level</span>
-      
-      
-        <span class='type'>(<tt>String</tt>)</span>
-      
-      
-        <em class="default">(defaults to: <tt>$ssh::params::log_level</tt>)</em>
-      
-      
-        &mdash;
-        <div class='inline'>
-<p><code>log_level</code> parameter to write to config file</p>
-</div>
-      
-    </li>
-  
-    <li>
-      
-        <span class='name'>manage_log_level</span>
-      
-      
-        <span class='type'>(<tt>Boolean</tt>)</span>
-      
-      
-        <em class="default">(defaults to: <tt>true</tt>)</em>
-      
-      
-        &mdash;
-        <div class='inline'>
-<p><code>true</code> to manage <code>log_level</code> in config file otherwise
-leave alone</p>
-</div>
-      
-    </li>
-  
-    <li>
-      
-        <span class='name'>x11_forwarding</span>
-      
-      
-        <span class='type'>(<tt>Enum["yes", "no"]</tt>)</span>
-      
-      
-        <em class="default">(defaults to: <tt>$ssh::params::x11_forwarding</tt>)</em>
-      
-      
-        &mdash;
-        <div class='inline'>
-<p><code>x11_forwarding</code> value for config file</p>
-</div>
-      
-    </li>
-  
-    <li>
-      
-        <span class='name'>manage_x11_forwarding</span>
-      
-      
-        <span class='type'>(<tt>Boolean</tt>)</span>
-      
-      
-        <em class="default">(defaults to: <tt>true</tt>)</em>
-      
-      
-        &mdash;
-        <div class='inline'>
-<p><code>true</code> to manage <code>x11_forwarding</code> in config file
-otherwise leave alone</p>
-</div>
-      
-    </li>
-  
-    <li>
-      
-        <span class='name'>max_auth_tries</span>
-      
-      
-        <span class='type'>(<tt>String</tt>)</span>
-      
-      
-        <em class="default">(defaults to: <tt>$ssh::params::max_auth_tries</tt>)</em>
-      
-      
-        &mdash;
-        <div class='inline'>
-<p><code>max_auth_tries</code> value for config file</p>
-</div>
-      
-    </li>
-  
-    <li>
-      
-        <span class='name'>manage_max_auth_tries</span>
-      
-      
-        <span class='type'>(<tt>Boolean</tt>)</span>
-      
-      
-        <em class="default">(defaults to: <tt>true</tt>)</em>
-      
-      
-        &mdash;
-        <div class='inline'>
-<p><code>true</code> to manage <code>max_auth_tries</code> in config file
-otherwise leave alone</p>
-</div>
-      
-    </li>
-  
-    <li>
-      
-        <span class='name'>ignore_rhosts</span>
-      
-      
-        <span class='type'>(<tt>Enum["yes", "no"]</tt>)</span>
-      
-      
-        <em class="default">(defaults to: <tt>$ssh::params::ignore_rhosts</tt>)</em>
-      
-      
-        &mdash;
-        <div class='inline'>
-<p><code>ignore_rhosts</code> value for config file</p>
-</div>
-      
-    </li>
-  
-    <li>
-      
-        <span class='name'>manage_ignore_rhosts</span>
-      
-      
-        <span class='type'>(<tt>Boolean</tt>)</span>
-      
-      
-        <em class="default">(defaults to: <tt>true</tt>)</em>
-      
-      
-        &mdash;
-        <div class='inline'>
-<p><code>true</code> to manage <code>ignore_rhosts</code> in config file
-otherwise leave alone</p>
-</div>
-      
-    </li>
-  
-    <li>
-      
-        <span class='name'>hostbased_authentication</span>
-      
-      
-        <span class='type'>(<tt>Enum["yes", "no"]</tt>)</span>
-      
-      
-        <em class="default">(defaults to: <tt>$ssh::params::hostbased_authentication</tt>)</em>
-      
-      
-        &mdash;
-        <div class='inline'>
-<p><code>hostbased_authentication</code> value for config file</p>
-</div>
-      
-    </li>
-  
-    <li>
-      
-        <span class='name'>manage_hostbased_authentication</span>
-      
-      
-        <span class='type'>(<tt>Boolean</tt>)</span>
-      
-      
-        <em class="default">(defaults to: <tt>true</tt>)</em>
-      
-      
-        &mdash;
-        <div class='inline'>
-<p><code>true</code> to manage <code>hostbased_authentication</code> in config
-file otherwise leave alone</p>
-</div>
-      
-    </li>
-  
-    <li>
-      
-        <span class='name'>permit_root_login</span>
-      
-      
-        <span class='type'>(<tt>Enum["yes", "no"]</tt>)</span>
-      
-      
-        <em class="default">(defaults to: <tt>$ssh::params::permit_root_login</tt>)</em>
-      
-      
-        &mdash;
-        <div class='inline'>
-<p>value for <code>permit_root_login</code> in config file</p>
-</div>
-      
-    </li>
-  
-    <li>
-      
-        <span class='name'>manage_permit_root_login</span>
-      
-      
-        <span class='type'>(<tt>Boolean</tt>)</span>
-      
-      
-        <em class="default">(defaults to: <tt>true</tt>)</em>
-      
-      
-        &mdash;
-        <div class='inline'>
-<p><code>true</code> to manage <code>permit_root_login</code> in config file
-otherwise leave alone</p>
-</div>
-      
-    </li>
-  
-    <li>
-      
-        <span class='name'>permit_empty_passwords</span>
-      
-      
-        <span class='type'>(<tt>Enum["yes", "no"]</tt>)</span>
-      
-      
-        <em class="default">(defaults to: <tt>$ssh::params::permit_empty_passwords</tt>)</em>
-      
-      
-        &mdash;
-        <div class='inline'>
-<p>value for <code>permit_empty_passwords</code> in config file</p>
-</div>
-      
-    </li>
-  
-    <li>
-      
-        <span class='name'>manage_permit_empty_passwords</span>
-      
-      
-        <span class='type'>(<tt>Boolean</tt>)</span>
-      
-      
-        <em class="default">(defaults to: <tt>true</tt>)</em>
-      
-      
-        &mdash;
-        <div class='inline'>
-<p><code>true</code> to manage <code>permit_empty_passwords</code> in config
-file otherwise leave alone</p>
-</div>
-      
-    </li>
-  
-    <li>
-      
-        <span class='name'>permit_user_environment</span>
-      
-      
-        <span class='type'>(<tt>Enum["yes", "no"]</tt>)</span>
-      
-      
-        <em class="default">(defaults to: <tt>$ssh::params::permit_user_environment</tt>)</em>
-      
-      
-        &mdash;
-        <div class='inline'>
-<p>value for <code>permit_user_environment</code> in config file</p>
-</div>
-      
-    </li>
-  
-    <li>
-      
-        <span class='name'>manage_permit_user_environment</span>
-      
-      
-        <span class='type'>(<tt>Boolean</tt>)</span>
-      
-      
-        <em class="default">(defaults to: <tt>true</tt>)</em>
-      
-      
-        &mdash;
-        <div class='inline'>
-<p><code>true</code> to manage <code>permit_user_environment</code> in config
-file otherwise leave alone</p>
-</div>
-      
-    </li>
-  
-    <li>
-      
-        <span class='name'>ciphers</span>
-      
-      
-        <span class='type'>(<tt>Array[String]</tt>)</span>
-      
-      
-        <em class="default">(defaults to: <tt>$ssh::params::ciphers</tt>)</em>
-      
-      
-        &mdash;
-        <div class='inline'>
-<p>value for <code>ciphers</code> in config file</p>
-</div>
-      
-    </li>
-  
-    <li>
-      
-        <span class='name'>manage_ciphers</span>
-      
-      
-        <span class='type'>(<tt>Boolean</tt>)</span>
-      
-      
-        <em class="default">(defaults to: <tt>true</tt>)</em>
-      
-      
-        &mdash;
-        <div class='inline'>
-<p><code>true</code> to manage <code>ciphers</code> in config file otherwise
-leave alone</p>
-</div>
-      
-    </li>
-  
-    <li>
-      
-        <span class='name'>client_alive_interval</span>
-      
-      
-        <span class='type'>(<tt>String</tt>)</span>
-      
-      
-        <em class="default">(defaults to: <tt>$ssh::params::client_alive_interval</tt>)</em>
-      
-      
-        &mdash;
-        <div class='inline'>
-<p>value for <code>client_alive_interval</code> in config file</p>
-</div>
-      
-    </li>
-  
-    <li>
-      
-        <span class='name'>manage_client_alive_interval</span>
-      
-      
-        <span class='type'>(<tt>Boolean</tt>)</span>
-      
-      
-        <em class="default">(defaults to: <tt>true</tt>)</em>
-      
-      
-        &mdash;
-        <div class='inline'>
-<p><code>true</code> to manage <code>client_alive_interval</code> in config
-file otherwise leave alone</p>
-</div>
-      
-    </li>
-  
-    <li>
-      
-        <span class='name'>client_alive_count_max</span>
-      
-      
-        <span class='type'>(<tt>String</tt>)</span>
-      
-      
-        <em class="default">(defaults to: <tt>$ssh::params::client_alive_count_max</tt>)</em>
-      
-      
-        &mdash;
-        <div class='inline'>
-<p>value for <code>client_alive_count_max</code> in config file</p>
-</div>
-      
-    </li>
-  
-    <li>
-      
-        <span class='name'>manage_client_alive_count_max</span>
-      
-      
-        <span class='type'>(<tt>Boolean</tt>)</span>
-      
-      
-        <em class="default">(defaults to: <tt>true</tt>)</em>
-      
-      
-        &mdash;
-        <div class='inline'>
-<p><code>true</code> to manage <code>client_alive_count_max</code> in config
-file otherwise leave alone</p>
-</div>
-      
-    </li>
-  
-    <li>
-      
-        <span class='name'>banner</span>
-      
-      
-        <span class='type'>(<tt>String</tt>)</span>
-      
-      
-        <em class="default">(defaults to: <tt>$ssh::params::banner</tt>)</em>
-      
-      
-        &mdash;
-        <div class='inline'>
-<p>value for <code>banner</code> in config file</p>
-</div>
-      
-    </li>
-  
-    <li>
-      
-        <span class='name'>manage_banner</span>
-      
-      
-        <span class='type'>(<tt>Boolean</tt>)</span>
-      
-      
-        <em class="default">(defaults to: <tt>true</tt>)</em>
-      
-      
-        &mdash;
-        <div class='inline'>
-<p><code>true</code> to manage <code>banner</code> in config file otherwise
-leave alone</p>
-</div>
-      
-    </li>
-  
-    <li>
-      
-        <span class='name'>extra_config</span>
-      
-      
-        <span class='type'>(<tt>Hash</tt>)</span>
+        <span class='type'>(<tt>Hash[String,Variant[String,Array[String]]]</tt>)</span>
       
       
         <em class="default">(defaults to: <tt>{}</tt>)</em>
       
       
-        &mdash;
-        <div class='inline'>
-<p>hash of extra configuration to add to the config file, in a form suitable
-for <code>create_resources(&quot;sshd_config&quot;, $extra_config)</code></p>
-</div>
-      
     </li>
   
 </ul>
 
+
+  <p class="tag_title">See Also:</p>
+  <ul class="see">
+    
+      <li><a href="https://forge.puppet.com/herculesteam/augeasproviders_ssh" target="_parent" title="https://forge.puppet.com/herculesteam/augeasproviders_ssh">https://forge.puppet.com/herculesteam/augeasproviders_ssh</a></li>
+    
+      <li><a href="https://forge.puppet.com/herculesteam/augeasproviders_core" target="_parent" title="https://forge.puppet.com/herculesteam/augeasproviders_core">https://forge.puppet.com/herculesteam/augeasproviders_core</a></li>
+    
+  </ul>
 
 </div><div class="method_details_list">
   <table class="source_code">
@@ -903,6 +444,31 @@ for <code>create_resources(&quot;sshd_config&quot;, $extra_config)</code></p>
         <pre class="lines">
 
 
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
 105
 106
 107
@@ -942,181 +508,27 @@ for <code>create_resources(&quot;sshd_config&quot;, $extra_config)</code></p>
 141
 142
 143
-144
-145
-146
-147
-148
-149
-150
-151
-152
-153
-154
-155
-156
-157
-158
-159
-160
-161
-162
-163
-164
-165
-166
-167
-168
-169
-170
-171
-172
-173
-174
-175
-176
-177
-178
-179
-180
-181
-182
-183
-184
-185
-186
-187
-188
-189
-190
-191
-192
-193
-194
-195
-196
-197
-198
-199
-200
-201
-202
-203
-204
-205
-206
-207
-208
-209
-210
-211
-212
-213
-214
-215
-216
-217
-218
-219
-220
-221
-222
-223
-224
-225
-226
-227
-228
-229
-230
-231
-232
-233
-234
-235
-236
-237
-238
-239
-240
-241
-242
-243
-244
-245
-246
-247
-248
-249
-250
-251
-252
-253
-254
-255
-256
-257
-258
-259
-260
-261
-262
-263
-264
-265
-266
-267
-268
-269
-270
-271</pre>
+144</pre>
       </td>
       <td>
-        <pre class="code"><span class="info file"># File 'manifests/init.pp', line 105</span>
+        <pre class="code"><span class="info file"># File 'manifests/init.pp', line 80</span>
 
 class ssh(
-    Boolean $manage_package                     = $ssh::params::manage_package,
-    Boolean $manage_service                     = $ssh::params::manage_service,
-    String $service_name                        = $ssh::params::service_name,
-    Enum[&quot;stopped&quot;, &quot;running&quot;] $service_ensure  = $ssh::params::service_ensure,
-    Boolean $service_enable                     = $ssh::params::service_enable,
-    Optional[Hash] $manual_package              = undef,
-    Boolean $auto_install                       = $ssh::params::auto_install,
-    String $package_name                        = $ssh::params::package_name,
+    String                                      $service_name,
+    Boolean                                     $auto_install,
+    String                                      $package_name,
+    String                                      $config_file_group,
+    String                                      $config_file_mode,
+    Boolean                                     $manage_package     = true,
+    Boolean                                     $manage_service     = true,
+    Enum[&quot;stopped&quot;, &quot;running&quot;]                  $service_ensure     = &quot;running&quot;,
+    Boolean                                     $service_enable     = true,
+    String                                      $config_file_name   = &quot;/etc/ssh/sshd_config&quot;,
+    Optional[Hash]                              $manual_package     = undef,
+    String                                      $service_title      = &quot;sshd&quot;,
+    Hash[String,Variant[String,Array[String]]]  $settings           = {},
+) {
 
-    String $config_file_name                    = $ssh::params::config_file_name,
-    String $config_file_group                   = $ssh::params::config_file_group,
-    String $config_file_mode                    = $ssh::params::config_file_mode,
-    String $protocol                            = $ssh::params::protocol,
-    Boolean $manage_protocol                    = true,
-    String $log_level                           = $ssh::params::log_level,
-    Boolean $manage_log_level                   = true,
-    Enum[&quot;yes&quot;, &quot;no&quot;] $x11_forwarding           = $ssh::params::x11_forwarding,
-    Boolean $manage_x11_forwarding              = true,
-    String $max_auth_tries                      = $ssh::params::max_auth_tries,
-    Boolean $manage_max_auth_tries              = true,
-    Enum[&quot;yes&quot;, &quot;no&quot;] $ignore_rhosts            = $ssh::params::ignore_rhosts,
-    Boolean $manage_ignore_rhosts               = true,
-    Enum[&quot;yes&quot;, &quot;no&quot;] $hostbased_authentication = $ssh::params::hostbased_authentication,
-    Boolean $manage_hostbased_authentication    = true,
-    Enum[&quot;yes&quot;, &quot;no&quot;] $permit_root_login        = $ssh::params::permit_root_login,
-    Boolean $manage_permit_root_login           = true,
-    Enum[&quot;yes&quot;, &quot;no&quot;] $permit_empty_passwords   = $ssh::params::permit_empty_passwords,
-    Boolean $manage_permit_empty_passwords      = true,
-    Enum[&quot;yes&quot;, &quot;no&quot;] $permit_user_environment  = $ssh::params::permit_user_environment,
-    Boolean $manage_permit_user_environment     = true,
-    Array[String] $ciphers                      = $ssh::params::ciphers,
-    Boolean $manage_ciphers                     = true,
-    String $client_alive_interval               = $ssh::params::client_alive_interval,
-    Boolean $manage_client_alive_interval       = true,
-    String $client_alive_count_max              = $ssh::params::client_alive_count_max,
-    Boolean $manage_client_alive_count_max      = true,
-    String $banner                              = $ssh::params::banner,
-    Boolean $manage_banner                      = true,
-    Hash $extra_config                          = {},
-) inherits ssh::params {
-
-  $service_title = &quot;sshd&quot;
 
   if $manage_package {
     # must specify all the details for $manual_package if used
@@ -1149,86 +561,11 @@ class ssh(
     notify =&gt; $notify,
   }
 
-  if $manage_protocol {
-    sshd_config { &quot;Protocol&quot;:
-      value =&gt; $protocol,
+  $settings.each |$key, $value| {
+    sshd_config { $key:
+      value =&gt; $value
     }
   }
-
-  if $manage_log_level {
-    sshd_config { &quot;LogLevel&quot;:
-      value =&gt; $log_level,
-    }
-  }
-
-  if $manage_x11_forwarding {
-    sshd_config { &quot;X11Forwarding&quot;:
-      value =&gt; $x11_forwarding,
-    }
-  }
-
-  if $manage_max_auth_tries {
-    sshd_config { &quot;MaxAuthTries&quot;:
-      value =&gt; $max_auth_tries,
-    }
-  }
-
-  if $manage_ignore_rhosts {
-    sshd_config { &quot;IgnoreRhosts&quot;:
-      value =&gt; $ignore_rhosts,
-    }
-  }
-
-  if $manage_hostbased_authentication {
-    sshd_config { &quot;HostbasedAuthentication&quot;:
-      value =&gt; $hostbased_authentication,
-    }
-  }
-
-  if $manage_permit_root_login {
-    sshd_config { &quot;PermitRootLogin&quot;:
-      value  =&gt; $permit_root_login,
-    }
-  }
-
-  if $manage_permit_empty_passwords {
-    sshd_config { &quot;PermitEmptyPasswords&quot;:
-      value  =&gt; $permit_empty_passwords,
-    }
-  }
-
-  if $manage_permit_user_environment {
-    sshd_config { &quot;PermitUserEnvironment&quot;:
-      value  =&gt; $permit_user_environment ,
-    }
-  }
-
-  if $manage_ciphers {
-    sshd_config { &quot;Ciphers&quot;:
-      value  =&gt; $ciphers,
-    }
-  }
-
-  if $manage_client_alive_interval {
-    sshd_config { &quot;ClientAliveInterval&quot;:
-      value  =&gt; $client_alive_interval,
-    }
-  }
-
-  if $manage_client_alive_count_max {
-    sshd_config { &quot;ClientAliveCountMax&quot;:
-      value  =&gt; $client_alive_count_max,
-    }
-  }
-
-  if $manage_banner {
-    sshd_config { &quot;Banner&quot;:
-      value  =&gt; $banner,
-    }
-  }
-
-  # create any user supplied
-  create_resources(&quot;sshd_config&quot;, $extra_config)
 
   # we always create Service[sshd] mananging the appropriate service to allow
   # other users of this module to refer to a consistent service name

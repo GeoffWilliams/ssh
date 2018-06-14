@@ -1,0 +1,6 @@
+# data/os/AIX.yaml
+---
+ssh::auto_install: false
+ssh::config_file_group: "system"
+ssh::config_file_mode: "0600"
+ssh::service_name: "sshd"
