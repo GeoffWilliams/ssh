@@ -1,6 +1,6 @@
 {
   "name": "geoffwilliams-ssh",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "author": "geoffwilliams",
   "summary": "Manage SSH with Puppet on AIX, Solaris and RHEL",
   "license": "Apache-2.0",
