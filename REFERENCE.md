@@ -2,13 +2,11 @@
 
 ## Classes
 
-* [`ssh`](#ssh): Install and manage ssh daemon with Puppet.  Package installation is determined automatically on RedHat or you may supply a valid package name
+* [`ssh`](#ssh): Install and manage ssh daemon with Puppet.
 
 ## Classes
 
 ### ssh
-
-Install and manage ssh daemon with Puppet.
 
 Package installation is determined automatically on RedHat or you may supply a
 valid package name in `package_name`. Where additional information is required
